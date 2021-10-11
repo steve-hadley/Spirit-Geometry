@@ -1,51 +1,53 @@
 let theta = 0;
 let axis = 6;
 let step;
-let rotation = 0;
 
+// Circles
 let startRadius = 100;
 let radius;
 let startCircleDiameter = 200;
 let circleDiameter;
 
-let expanding = true;
+// Lines
+let lineLength = 400;
+let lineStep = 30;
 
-let slider;
+
+let axisSlider;
+let radiusSlider;
+let circleDiameterSlider;
+let lineLengthSlider;
+let lineStepSlider;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth / 2, windowHeight);
   noFill();
   stroke(255);
   strokeWeight(3);
   radius = startRadius;
   circleDiameter = startCircleDiameter;
-  slider = createSlider(6, 30, 6);
-  slider.position(10, 10);
-  slider.style('width', '80px');
+  axisSlider = createSlider(6, 30, 6);
+  axisSlider.position(10, 10);
+  radiusSlider = createSlider(10, width / 2, 100);
+  radiusSlider.position(10, 40);
+  circleDiameterSlider = createSlider(50, width / 2, 100);
+  circleDiameterSlider.position(10, 70);
+  lineLengthSlider = createSlider(100, 600, 100);
+  lineLengthSlider.position(10, 100);
+  lineStepSlider = createSlider(10, 100, 30);
+  lineStepSlider.position(10, 130);
 }
 
 function draw(){
   background(0);
 
-  let sliderValue = slider.value();
-  axis = sliderValue;
   step = TWO_PI / axis;
+  axis = axisSlider.value();
+  circleDiameter = circleDiameterSlider.value();
+  radius = radiusSlider.value();
+  lineLength = lineLengthSlider.value();
+  lineStep = lineStepSlider.value();
 
-  // Expand and contract
-  if(circleDiameter > height / 2 || circleDiameter > width / 2 || circleDiameter < startCircleDiameter){
-    expanding =! expanding;
-  }
-  
-  if(expanding){
-    circleDiameter += 1;
-    radius += 0.5;
-  } else {
-    circleDiameter -= 1;
-    radius -= 0.5;
-  }
-
-  // Rotate
-  rotation += 0.002;
 
   // Flower
   translate(width / 2, height / 2);
@@ -69,8 +71,19 @@ function draw(){
     lineStart.y = radius * sin(theta);
     line(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y);
   }
+
+  // Lines
+  for (let a = 0; a < 360; a += lineStep){
+    push();
+    rotate(radians(a));
+    for (let r = 0; r < 180; r += lineStep) {
+      line(sin(radians(r)) * lineLength, cos(radians(r)) * lineLength, sin(radians(-r)) * lineLength, cos(radians(-r)) * lineLength);
+    }
+    pop();  
+  }
 }
 
+// Save image
 function keyPressed() {
   if (keyCode === ENTER) {
     saveCanvas('Sacred-Geometry', 'jpg');
