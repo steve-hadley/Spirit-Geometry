@@ -30,9 +30,9 @@ function setup() {
   axisSlider.position(10, 10);
   radiusSlider = createSlider(10, width / 2, 100);
   radiusSlider.position(10, 40);
-  circleDiameterSlider = createSlider(50, width / 2, 100);
+  circleDiameterSlider = createSlider(50, width / 2, 200);
   circleDiameterSlider.position(10, 70);
-  lineLengthSlider = createSlider(100, 600, 100);
+  lineLengthSlider = createSlider(100, 600, 400);
   lineLengthSlider.position(10, 100);
   lineStepSlider = createSlider(10, 100, 30);
   lineStepSlider.position(10, 130);
