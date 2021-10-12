@@ -12,45 +12,42 @@ let circleDiameter;
 let lineLength = 400;
 let lineStep = 30;
 
-
 let axisSlider;
 let radiusSlider;
 let circleDiameterSlider;
 let lineLengthSlider;
 let lineStepSlider;
 
+var controls;
+
 function setup() {
-  createCanvas(windowWidth / 2, windowHeight);
+  var canvas = createCanvas();
+  calculateCanvasSize();
+  canvas.parent('p5js-container');
+  controls = document.getElementById('controls');
+  document.getElementById('export-button').onclick = (function () {
+    Export();
+  })
   noFill();
   stroke(255);
   strokeWeight(3);
   radius = startRadius;
   circleDiameter = startCircleDiameter;
-  axisSlider = createSlider(6, 30, 6);
-  axisSlider.position(10, 10);
-  radiusSlider = createSlider(10, width / 2, 100);
-  radiusSlider.position(10, 40);
-  circleDiameterSlider = createSlider(50, width / 2, 200);
-  circleDiameterSlider.position(10, 70);
-  lineLengthSlider = createSlider(100, 600, 400);
-  lineLengthSlider.position(10, 100);
-  lineStepSlider = createSlider(10, 100, 30);
-  lineStepSlider.position(10, 130);
 }
 
 function draw(){
   background(0);
 
   step = TWO_PI / axis;
-  axis = axisSlider.value();
-  circleDiameter = circleDiameterSlider.value();
-  radius = radiusSlider.value();
-  lineLength = lineLengthSlider.value();
-  lineStep = lineStepSlider.value();
+  axis = controls.querySelector('#axis-slider').value;
+  circleDiameter = controls.querySelector('#circle-diameter-slider').value;
+  radius = controls.querySelector('#radius-slider').value;
+  lineLength = controls.querySelector('#line-length-slider').value;
 
+  translate(width / 2, height / 2);
+  theta = 0;
 
   // Flower
-  translate(width / 2, height / 2);
   circle(0, 0, 200);
   let circlePos = createVector();
   for (let i = 0; i < axis; i++) {
@@ -59,17 +56,6 @@ function draw(){
     circlePos.x = radius * cos(theta);
     circlePos.y = radius * sin(theta);
     circle(circlePos.x, circlePos.y, circleDiameter);
-  }
-
-  // Flower center
-  theta = 0;
-  let lineStart = createVector();
-  let lineEnd = createVector();
-  for (let i = 0; i < axis; i++) {
-    theta += step;
-    lineStart.x = radius * cos(theta);
-    lineStart.y = radius * sin(theta);
-    line(lineStart.x, lineStart.y, lineEnd.x, lineEnd.y);
   }
 
   // Lines
@@ -84,8 +70,18 @@ function draw(){
 }
 
 // Save image
-function keyPressed() {
-  if (keyCode === ENTER) {
-    saveCanvas('Sacred-Geometry', 'jpg');
+function Export() {
+  saveCanvas('Export', 'jpg');
+}
+
+function windowResized() {
+  calculateCanvasSize();
+}
+
+function calculateCanvasSize(){
+  if(windowWidth < 1600){
+    resizeCanvas(windowWidth, windowHeight);
+  } else {
+    resizeCanvas(windowWidth / 2, windowHeight);
   }
 }
