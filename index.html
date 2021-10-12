@@ -30,6 +30,14 @@
           <output id="lineLengthOutput">0</output>
           <input type="range" class="form-range" min="100" max="600" step="1" value="400" id="line-length-slider" oninput="lineLengthOutput.value = this.value">
 
+          <label class="form-label">Line step:</label>
+          <output id="lineStepOutput">0</output>
+          <input type="range" class="form-range" min="15" max="60" step="15" value="30" id="line-step-slider" oninput="lineStepOutput.value = this.value">
+
+          <label class="form-label">Line gap:</label>
+          <output id="lineGapOutput">0</output>
+          <input type="range" class="form-range" min="15" max="100" step="15" value="30" id="line-gap-slider" oninput="lineGapOutput.value = this.value">
+
           <button id="export-button" type="button" class="btn btn-primary">Export</button>
 
         </div>
