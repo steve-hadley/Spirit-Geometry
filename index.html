@@ -16,28 +16,28 @@
       <div class="row">
         <div id="p5js-container"></div>
         <div id="controls">
-          <label class="form-label">Axis:</label>
+          <label class="form-label">Circle count:</label>
           <output id="axisSliderOutput"></output>
           <input type="range" class="form-range" min="4" max="40" step="2" id="axis-slider" oninput="axisSliderOutput.value = this.value">
           <label class="form-label">Circle diameter:</label>
           <output id="circleDiameterOutput"></output>
           <input type="range" class="form-range" min="10" max="500" step="1" id="circle-diameter-slider" oninput="circleDiameterOutput.value = this.value">
-          <label class="form-label">Radius:</label>
+          <label class="form-label">Circle offset:</label>
           <output id="radiusOutput"></output>
           <input type="range" class="form-range" min="50" max="500" step="1" id="radius-slider" oninput="radiusOutput.value = this.value">
           <label class="form-label">Line length:</label>
           <output id="lineLengthOutput"></output>
           <input type="range" class="form-range" min="100" max="600" step="1" id="line-length-slider" oninput="lineLengthOutput.value = this.value">
-          <label class="form-label">Line step:</label>
+          <label class="form-label">Line outer step:</label>
           <output id="lineStepOutput"></output>
           <input type="range" class="form-range" min="15" max="60" step="15" id="line-step-slider" oninput="lineStepOutput.value = this.value">
-          <label class="form-label">Line gap:</label>
+          <label class="form-label">Line inner step:</label>
           <output id="lineGapOutput"></output>
-          <input type="range" class="form-range" min="15" max="100" step="15" id="line-gap-slider" oninput="lineGapOutput.value = this.value">
+          <input type="range" class="form-range" min="15" max="90" step="15" id="line-gap-slider" oninput="lineGapOutput.value = this.value">
           <label class="form-label">Stroke weight:</label>
           <output id="StrokeWeightOutput"></output>
           <input type="range" class="form-range" min="1" max="5" step="1" id="stroke-weight-slider" oninput="StrokeWeightOutput.value = this.value">
-          <button id="export-button" type="button" class="btn btn-primary">Export</button>
+          <button id="export-button" type="button" class="btn btn-primary mt-3">Export</button>
         </div>
       </div>
     </div>

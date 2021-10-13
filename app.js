@@ -13,6 +13,7 @@ function setup() {
 
   var canvas = createCanvas();
   calculateCanvasSize();
+  setDefaults();
   canvas.parent('p5js-container');
   
   document.getElementById('export-button').onclick = (function () {
@@ -132,5 +133,4 @@ function windowResized() {
 
 function calculateCanvasSize(){
   resizeCanvas(windowWidth, windowHeight);
-  setDefaults();
 }
