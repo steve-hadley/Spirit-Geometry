@@ -1,7 +1,7 @@
 let circleElement;
 let lineElement;
 
-let controls;
+let controlsContainer;
 let axisSlider;
 let radiusSlider;
 let circleDiameterSlider;
@@ -9,13 +9,13 @@ let lineLengthSlider;
 let lineStepSlider;
 
 function setup() {
-  controls = document.getElementById('controls');
+  controlsContainer = document.getElementById('controls');
 
   var canvas = createCanvas();
+  canvas.parent('p5js-container');
   calculateCanvasSize();
   setDefaults();
-  canvas.parent('p5js-container');
-  
+
   document.getElementById('export-button').onclick = (function () {
     Export();
   })
@@ -59,11 +59,7 @@ function setDefaults(){
 
 class CircleElement{
   constructor(){
-    this.theta = 0;
-    this.axis = 6;
-    this.step = TWO_PI / this.axis;
-    this.radius;
-    this.diameter;
+    this.resize();
   }
   resize(){
     this.axis = GetInputValue('#axis-slider');
@@ -73,7 +69,7 @@ class CircleElement{
   }
   display(){
     this.theta = 0;
-    circle(0, 0, 200);
+    circle(0, 0, this.diameter);
     let pos = createVector();
     for (let i = 0; i < this.axis; i++) {
       this.theta += this.step;
@@ -87,9 +83,7 @@ class CircleElement{
 
 class LineElement{
   constructor(){
-    this.length = 300;
-    this.outerStep = 40;
-    this.innerStep = 40;
+    this.resize();
   }
   resize(){
     this.length = GetInputValue('#line-length-slider');
@@ -115,16 +109,16 @@ function Export() {
 }
 
 function SetInputValue(id, value){
-  controls.querySelector(id).value = value;
-  controls.querySelector(id).oninput();
+  controlsContainer.querySelector(id).value = value;
+  controlsContainer.querySelector(id).oninput();
 }
 
 function GetInput(id){
-  return controls.querySelector(id);
+  return controlsContainer.querySelector(id);
 }
 
 function GetInputValue(id){
-  return parseInt(controls.querySelector(id).value);
+  return parseInt(controlsContainer.querySelector(id).value);
 }
 
 function windowResized() {
