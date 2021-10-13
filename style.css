@@ -17,3 +17,8 @@ label {
 output {
   color: white;
 }
+
+#controls{
+  position: absolute;
+  width: 300px;
+}

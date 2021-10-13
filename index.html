@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sacred Geometry Engine</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="libraries/p5.min.js"></script>
@@ -12,37 +14,30 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-        <div id="controls" class="col-lg-2 col-sm-12 order-lg-first order-sm-last">
-            
+        <div id="p5js-container"></div>
+        <div id="controls">
           <label class="form-label">Axis:</label>
-          <output id="axisSliderOutput">0</output>
-          <input type="range" class="form-range" min="4" max="40" step="1" value="6" id="axis-slider" oninput="axisSliderOutput.value = this.value">
-
+          <output id="axisSliderOutput">6</output>
+          <input type="range" class="form-range" min="4" max="40" step="2" value="6" id="axis-slider" oninput="axisSliderOutput.value = this.value">
           <label class="form-label">Circle diameter:</label>
-          <output id="circleDiameterOutput">0</output>
+          <output id="circleDiameterOutput">100</output>
           <input type="range" class="form-range" min="10" max="500" step="1" value="100" id="circle-diameter-slider" oninput="circleDiameterOutput.value = this.value">
-
           <label class="form-label">Radius:</label>
-          <output id="radiusOutput">0</output>
+          <output id="radiusOutput">200</output>
           <input type="range" class="form-range" min="50" max="500" step="1" value="200" id="radius-slider" oninput="radiusOutput.value = this.value">
-
           <label class="form-label">Line length:</label>
-          <output id="lineLengthOutput">0</output>
+          <output id="lineLengthOutput">400</output>
           <input type="range" class="form-range" min="100" max="600" step="1" value="400" id="line-length-slider" oninput="lineLengthOutput.value = this.value">
-
           <label class="form-label">Line step:</label>
-          <output id="lineStepOutput">0</output>
+          <output id="lineStepOutput">30</output>
           <input type="range" class="form-range" min="15" max="60" step="15" value="30" id="line-step-slider" oninput="lineStepOutput.value = this.value">
-
           <label class="form-label">Line gap:</label>
-          <output id="lineGapOutput">0</output>
+          <output id="lineGapOutput">30</output>
           <input type="range" class="form-range" min="15" max="100" step="15" value="30" id="line-gap-slider" oninput="lineGapOutput.value = this.value">
-
+          <label class="form-label">Stroke weight:</label>
+          <output id="StrokeWeightOutput">2</output>
+          <input type="range" class="form-range" min="1" max="5" step="1" value="2" id="stroke-weight-slider" oninput="StrokeWeightOutput.value = this.value">
           <button id="export-button" type="button" class="btn btn-primary">Export</button>
-
-        </div>
-        <div class="col-lg-10 col-sm-12 order-lg-last order-sm-first">
-          <div id="p5js-container"></div>
         </div>
       </div>
     </div>

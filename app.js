@@ -1,7 +1,7 @@
-var circleElement;
-var lineElement;
+let circleElement;
+let lineElement;
 
-var controls;
+let controls;
 let axisSlider;
 let radiusSlider;
 let circleDiameterSlider;
@@ -27,6 +27,7 @@ function setup() {
 function draw(){
   background(0);
   translate(width / 2, height / 2);
+  strokeWeight(parseInt(GetInput('#stroke-weight-slider')));
   circleElement.resize();
   circleElement.display();
   lineElement.resize();
@@ -77,6 +78,7 @@ class LineElement{
       push();
       rotate(radians(a));
       for (let r = 0; r < 180; r += this.gap) {
+        // Rad method of creating line lengths in a wave pattern, inspired by https://linktr.ee/thedotiswhite
         line(sin(radians(r)) * this.length, cos(radians(r)) * this.length, sin(radians(-r)) * this.length, cos(radians(-r)) * this.length);
       }
       pop();  
