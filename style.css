@@ -20,8 +20,8 @@ output {
 .spacer {
   height: 20px;
 }
- /* Desktop */
-@media screen and (min-width: 820px) {
+/* Desktops */
+@media (min-width: 1281px) {
   #controls{
     position: absolute;
     width: 300px;
@@ -29,10 +29,28 @@ output {
     left: 10px;
   }
 }
- /* Mobile */
-@media screen and (max-width: 820px) {
-  div#controls {
-    position: absolute;
-    top: 80vh;
-  }
+
+/* Laptops */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    
+}
+
+/* Tablets, Ipads (portrait) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+}
+
+/* Tablets, Ipads (landscape) */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+}
+
+/* Low Resolution Tablets, Mobiles (Landscape) */
+@media (min-width: 481px) and (max-width: 767px) {
+  
+}
+
+/* Most of the Smartphones Mobiles (Portrait) */
+@media (min-width: 320px) and (max-width: 480px) {
+    
 }

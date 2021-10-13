@@ -45,8 +45,8 @@ function setDefaults(){
   SetInputValue('#line-gap-slider', 30);
   SetInputValue('#stroke-weight-slider', 2);
 
-  if(windowWidth < 820){
-    SetInputValue('#line-length-slider', 200);
+  if(windowWidth <= 1280){
+    SetInputValue('#line-length-slider', 130);
     SetInputValue('#radius-slider', 100);
     GetInput('#radius-slider').max = 200;
     GetInput('#line-length-slider').max = 400;
@@ -126,5 +126,9 @@ function windowResized() {
 }
 
 function calculateCanvasSize(){
-  resizeCanvas(windowWidth, windowHeight);
+  if(windowWidth <= 1280){
+    resizeCanvas(windowWidth, windowHeight / 2);
+  } else {
+    resizeCanvas(windowWidth, windowHeight);
+  }
 }
