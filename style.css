@@ -17,7 +17,9 @@ label {
 output {
   color: white;
 }
-
+.spacer {
+  height: 20px;
+}
 @media screen and (min-width: 820px) {
   #controls{
     position: absolute;
@@ -33,5 +35,4 @@ output {
     top: 80vh;
   }
 }
-
 

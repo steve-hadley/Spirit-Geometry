@@ -88,19 +88,19 @@ class CircleElement{
 class LineElement{
   constructor(){
     this.length = 300;
-    this.step = 40;
-    this.gap = 40;
+    this.outerStep = 40;
+    this.innerStep = 40;
   }
   resize(){
     this.length = GetInputValue('#line-length-slider');
-    this.step = GetInputValue('#line-step-slider');
-    this.gap = GetInputValue('#line-gap-slider');
+    this.outerStep = GetInputValue('#line-step-slider');
+    this.innerStep = GetInputValue('#line-gap-slider');
   }
   display(){
-    for (let a = 0; a < 360; a += this.step){
+    for (let a = 0; a < 360; a += this.outerStep){
       push();
       rotate(radians(a));
-      for (let r = 0; r < 180; r += this.gap) {
+      for (let r = 0; r < 180; r += this.innerStep) {
         // Rad method of creating line lengths in a wave pattern, inspired by https://linktr.ee/thedotiswhite
         line(sin(radians(r)) * this.length, cos(radians(r)) * this.length, sin(radians(-r)) * this.length, cos(radians(-r)) * this.length);
       }
