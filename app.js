@@ -61,14 +61,18 @@ class CircleElement{
     this.radius = GetInputValue('#radius-slider');
   }
   display(){
-    this.theta = 0;
+    // Draw center circle
     circle(0, 0, this.diameter);
+    // Angle to rotate by
+    this.theta = 0;
     let pos = createVector();
+    // Rotate as per axis count, incrementing the angle by the chosen step size
     for (let i = 0; i < this.axis; i++) {
       this.theta += this.step;
       // Polar to cartesian coordinate conversion
       pos.x = this.radius * cos(this.theta);
       pos.y = this.radius * sin(this.theta);
+      // Draw circle
       circle(pos.x, pos.y, this.diameter);
     }
   }
@@ -84,9 +88,11 @@ class LineElement{
     this.innerStep = GetInputValue('#line-gap-slider');
   }
   display(){
+    // Rotate by the chosen step
     for (let a = 0; a < 360; a += this.outerStep){
       push();
       rotate(radians(a));
+      // Draw lines in a wave pattern with a variable dispersion
       for (let r = 0; r < 180; r += this.innerStep) {
         // Rad method of creating line lengths in a wave pattern, inspired by https://linktr.ee/thedotiswhite
         line(sin(radians(r)) * this.length, cos(radians(r)) * this.length, sin(radians(-r)) * this.length, cos(radians(-r)) * this.length);
