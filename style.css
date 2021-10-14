@@ -28,6 +28,9 @@ output {
     top: 20px;
     left: 10px;
   }
+  div#link {
+    margin-top: 30px;
+  }
 }
 
 .copyleft {
@@ -37,8 +40,9 @@ output {
 
 div#link {
   text-align: center;
-  margin-top: 30px;
+  margin-bottom: 30px;
   font-size: 16px;
+  margin-bottom: 30px;
 }
 
 /* Laptops */
