@@ -1,7 +1,15 @@
+// Sacred Geometry Generator
+// Steve Hadley
+// https://vectr.is/links/
+
+// Objects
 let circleElement;
 let lineElement;
 
-let controlsContainer;
+// Input container
+let inputContainer;
+
+// Inputs
 let axisSlider;
 let radiusSlider;
 let circleDiameterSlider;
@@ -9,13 +17,16 @@ let lineLengthSlider;
 let lineStepSlider;
 
 function setup() {
-  controlsContainer = document.getElementById('controls');
+  inputContainer = document.getElementById('controls');
 
   var canvas = createCanvas();
   canvas.parent('p5js-container');
-  calculateCanvasSize();
-  setDefaults();
 
+  // Calculate canvas size in order to adapt to screen size
+  calculateCanvasSize();
+  // Set default values
+  setDefaults();
+  // Hook up export button
   document.getElementById('export-button').onclick = (function () {
     Export();
   })
@@ -23,12 +34,14 @@ function setup() {
   noFill();
   stroke(255);
   strokeWeight(3);
-
+  
+  // Create objects
   circleElement = new CircleElement();
   lineElement = new LineElement();
 }
 
 function draw(){
+  // Main loop
   background(0);
   translate(width / 2, height / 2);
   strokeWeight(parseInt(GetInputValue('#stroke-weight-slider')));
@@ -37,26 +50,6 @@ function draw(){
   lineElement.resize();
   lineElement.display();
 }
-
-function setDefaults(){
-  SetInputValue('#axis-slider', 6);
-  SetInputValue('#circle-diameter-slider', 100);
-  SetInputValue('#line-step-slider', 30);
-  SetInputValue('#line-gap-slider', 30);
-  SetInputValue('#stroke-weight-slider', 2);
-
-  if(windowWidth <= 1280){
-    SetInputValue('#line-length-slider', 130);
-    SetInputValue('#radius-slider', 100);
-    GetInput('#radius-slider').max = 200;
-    GetInput('#line-length-slider').max = 400;
-  } else {
-    SetInputValue('#line-length-slider', 400);
-    SetInputValue('#radius-slider', 200);
-    GetInput('#radius-slider').max = 500;
-  }
-}
-
 class CircleElement{
   constructor(){
     this.resize();
@@ -108,17 +101,38 @@ function Export() {
   saveCanvas('Export', 'jpg');
 }
 
+// Set default values based on device screen size
+function setDefaults(){
+  SetInputValue('#axis-slider', 6);
+  SetInputValue('#circle-diameter-slider', 100);
+  SetInputValue('#line-step-slider', 30);
+  SetInputValue('#line-gap-slider', 30);
+  SetInputValue('#stroke-weight-slider', 2);
+
+  if(windowWidth <= 1280){
+    SetInputValue('#line-length-slider', 130);
+    SetInputValue('#radius-slider', 100);
+    GetInput('#radius-slider').max = 200;
+    GetInput('#line-length-slider').max = 400;
+  } else {
+    SetInputValue('#line-length-slider', 400);
+    SetInputValue('#radius-slider', 200);
+    GetInput('#radius-slider').max = 500;
+  }
+}
+
+// Helper functions
 function SetInputValue(id, value){
-  controlsContainer.querySelector(id).value = value;
-  controlsContainer.querySelector(id).oninput();
+  inputContainer.querySelector(id).value = value;
+  inputContainer.querySelector(id).oninput();
 }
 
 function GetInput(id){
-  return controlsContainer.querySelector(id);
+  return inputContainer.querySelector(id);
 }
 
 function GetInputValue(id){
-  return parseInt(controlsContainer.querySelector(id).value);
+  return parseInt(inputContainer.querySelector(id).value);
 }
 
 function windowResized() {
