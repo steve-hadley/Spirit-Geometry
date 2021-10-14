@@ -43,13 +43,38 @@ function setup() {
 function draw(){
   // Main loop
   background(0);
-  translate(width / 2, height / 2);
   strokeWeight(parseInt(GetInputValue('#stroke-weight-slider')));
+
+  push();
+  translate(width / 2, height / 2);
+  display();
+  pop();
+  push();
+  translate(0, 0);
+  display();
+  pop();
+  push();
+  translate(windowWidth, 0);
+  display();
+  pop();
+  push();
+  translate(0, windowHeight);
+  display();
+  pop();
+  push();
+  translate(windowWidth, windowHeight);
+  display();
+  pop();
+
+}
+
+function display(){
   circleElement.resize();
   circleElement.display();
   lineElement.resize();
   lineElement.display();
 }
+
 class CircleElement{
   constructor(){
     this.resize();
@@ -147,8 +172,8 @@ function windowResized() {
 
 function calculateCanvasSize(){
   if(windowWidth <= 1280){
-    resizeCanvas(windowWidth, windowHeight / 2 - 100);
+    resizeCanvas(windowWidth, windowHeight / 2);
   } else {
-    resizeCanvas(windowWidth, windowHeight - 100);
+    resizeCanvas(windowWidth, windowHeight);
   }
 }
