@@ -127,8 +127,8 @@ function windowResized() {
 
 function calculateCanvasSize(){
   if(windowWidth <= 1280){
-    resizeCanvas(windowWidth, windowHeight / 2);
+    resizeCanvas(windowWidth, windowHeight / 2 - 100);
   } else {
-    resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(windowWidth, windowHeight - 100);
   }
 }
