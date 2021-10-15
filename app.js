@@ -7,6 +7,7 @@ let circleElements = [];
 let lineElements = [];
 
 // Input
+let inputs = [];
 let inputContainer;
 let axisSlider;
 let radiusSlider;
@@ -184,10 +185,10 @@ function initInputs(){
   }
 
   // Hook up inputs
-  let inputs = inputContainer.getElementsByTagName('input');
+  inputs = inputContainer.getElementsByTagName('input');
+  updateInputs();
   for (let i = 0; i < inputs.length; i++) {
     const input = inputs[i];
-    processInput(input);
     input.oninput = function(){
       processInput(input);
     }
@@ -201,6 +202,24 @@ function initInputs(){
   inputContainer.querySelector('#export-button').onclick = (function () {
     Export();
   })
+
+  inputContainer.querySelector('#randomize-button').onclick = (function () {
+    randomize();
+  })
+}
+
+function randomize(){
+  inputs.forEach(input => {
+    input.value = parseInt(random(input.min, input.max));
+  });
+  updateInputs();
+}
+
+function updateInputs(){
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
+    processInput(input);
+  }
 }
 
 function processInput(input){

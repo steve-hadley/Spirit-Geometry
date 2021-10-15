@@ -15,35 +15,40 @@
     <div class="container-fluid">
       <div class="row">
         <div id="p5js-container"></div>
-        <div id="controls">
-          <div class="form-check form-switch mb-2">
-            <input class="form-check-input" type="checkbox" id="animationToggle">
-            <label id="animationToggleOutput" class="form-check-label" for="animationToggle">Animate</label>
+        <form>
+          <div id="controls">
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="animationToggle">
+              <label id="animationToggleOutput" class="form-check-label" for="animationToggle">Animate</label>
+            </div>
+            <label class="form-label">Circle count:</label>
+            <output id="axisSliderOutput"></output>
+            <input type="range" class="form-range" min="4" max="40" step="2" id="axisSlider">
+            <label class="form-label">Circle diameter:</label>
+            <output id="circleDiameterSliderOutput"></output>
+            <input type="range" class="form-range" min="10" max="500" step="1" id="circleDiameterSlider">
+            <label class="form-label">Circle offset:</label>
+            <output id="radiusSliderOutput"></output>
+            <input type="range" class="form-range" min="50" max="500" step="1" id="radiusSlider">
+            <label class="form-label">Line length:</label>
+            <output id="lineLengthSliderOutput"></output>
+            <input type="range" class="form-range" min="100" max="600" step="1" id="lineLengthSlider">
+            <label class="form-label">Line outer step:</label>
+            <output id="lineStepSliderOutput"></output>
+            <input type="range" class="form-range" min="15" max="60" step="15" id="lineStepSlider">
+            <label class="form-label">Line inner step:</label>
+            <output id="lineGapSliderOutput"></output>
+            <input type="range" class="form-range" min="15" max="90" step="15" id="lineGapSlider">
+            <label class="form-label">Stroke weight:</label>
+            <output id="strokeWeightSliderOutput"></output>
+            <input type="range" class="form-range" min="1" max="5" step="1" id="strokeWeightSlider">
+            <button id="randomize-button" type="button" class="btn btn-primary mt-3">Randomize</button>
+            <div class="clearfix"></div>
+            <button id="export-button" type="button" class="btn btn-primary mt-4">Export</button>
+            <div class="spacer"></div>
           </div>
-          <label class="form-label">Circle count:</label>
-          <output id="axisSliderOutput"></output>
-          <input type="range" class="form-range" min="4" max="40" step="2" id="axisSlider">
-          <label class="form-label">Circle diameter:</label>
-          <output id="circleDiameterSliderOutput"></output>
-          <input type="range" class="form-range" min="10" max="500" step="1" id="circleDiameterSlider">
-          <label class="form-label">Circle offset:</label>
-          <output id="radiusSliderOutput"></output>
-          <input type="range" class="form-range" min="50" max="500" step="1" id="radiusSlider">
-          <label class="form-label">Line length:</label>
-          <output id="lineLengthSliderOutput"></output>
-          <input type="range" class="form-range" min="100" max="600" step="1" id="lineLengthSlider">
-          <label class="form-label">Line outer step:</label>
-          <output id="lineStepSliderOutput"></output>
-          <input type="range" class="form-range" min="15" max="60" step="15" id="lineStepSlider">
-          <label class="form-label">Line inner step:</label>
-          <output id="lineGapSliderOutput"></output>
-          <input type="range" class="form-range" min="15" max="90" step="15" id="lineGapSlider">
-          <label class="form-label">Stroke weight:</label>
-          <output id="strokeWeightSliderOutput"></output>
-          <input type="range" class="form-range" min="1" max="5" step="1" id="strokeWeightSlider">
-          <button id="export-button" type="button" class="btn btn-primary mt-3">Export</button>
-          <div class="spacer"></div>
-        </div>
+        </form>
+
       </div>
     </div>
     <div id="link">
