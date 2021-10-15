@@ -16,7 +16,7 @@ let lineStepSlider;
 let lineGapSlider;
 let strokeWeightSlider;
 
-let automatic = true
+let animate = false;
 
 let timer = 0;
 
@@ -39,7 +39,7 @@ function setup() {
   strokeWeight(3);
 
   var circleElement = new CircleElement();
-  if(automatic){
+  if(animate){
     circleElement.diameter = 0;
   }
   circleElements.push(circleElement);
@@ -53,7 +53,7 @@ function draw(){
   translate(width / 2, height / 2);
 
   // Animate
-  if(automatic){
+  if(animate){
     // Every x seconds
     if(millis() >= interval + timer){
       // Spawn new circle
@@ -192,6 +192,11 @@ function initInputs(){
       processInput(input);
     }
   }
+
+  let animationToggle = inputContainer.querySelector('#animationToggle');
+  animationToggle.addEventListener('change', function() {
+    animate = this.checked;
+  });
 
   inputContainer.querySelector('#export-button').onclick = (function () {
     Export();
