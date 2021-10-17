@@ -199,6 +199,8 @@ function initInputs(){
     animate = this.checked;
   });
 
+  animate = animationToggle.checked;
+
   inputContainer.querySelector('#export-button').onclick = (function () {
     Export();
   })
