@@ -103,7 +103,6 @@ class CircleElement{
   }
   display(){
     let alpha = 1.0 - (this.diameter / circleMaxDiameter);
-    strokeWeight(4);
     stroke(255, 255, 255, alpha);
     // Draw center circle
     circle(0, 0, this.diameter);
@@ -139,7 +138,6 @@ class LineElement{
       // Draw lines in a wave pattern with a variable dispersion
       for (let r = 0; r < 180; r += this.innerStep) {
         // Rad method of creating line lengths in a wave pattern, inspired by https://linktr.ee/thedotiswhite
-        strokeWeight(2);
         stroke(255, 255, 255, 1);
         line(sin(radians(r)) * this.length, cos(radians(r)) * this.length, sin(radians(-r)) * this.length, cos(radians(-r)) * this.length);
       }
