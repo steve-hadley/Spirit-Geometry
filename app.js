@@ -1,6 +1,6 @@
 // Sacred Geometry Generator
 // Steve Hadley
-// https://vectr.is/links/
+// https://vectr.is/
 
 // Objects
 let circleElements = [];
@@ -13,17 +13,16 @@ let axisSlider;
 let radiusSlider;
 let circleDiameterSlider;
 let lineLengthSlider;
-let lineStepSlider;
-let lineGapSlider;
+let lineOuterStepSlider;
+let lineInnerStepSlider;
 let strokeWeightSlider;
 
+// Animation
 let animate = false;
-
 let timer = 0;
-
 let interval = 4000;
-
-let circleMaxDiameter = 800;
+let circleMaxDiameter;
+let overshoot;
 
 function setup() {
   var canvas = createCanvas();
@@ -32,6 +31,7 @@ function setup() {
 
   // Initialize inputs
   initInputs();
+
   // Calculate canvas size in order to adapt to screen size
   calculateCanvasSize();
   
@@ -44,6 +44,7 @@ function setup() {
     circleElement.diameter = 0;
   }
   circleElements.push(circleElement);
+
   var lineElement = new LineElement();
   lineElements.push(lineElement);
 }
@@ -63,25 +64,142 @@ function draw(){
       circleElements.push(circleElement);
       timer = millis();
     }
-
+    // Animate current circles
     for (let i = 0; i < circleElements.length; i++) {
       circleElements[i].expand();
+      // Remove dead circles
       if(circleElements[i].diameter >= circleMaxDiameter){
         circleElements.splice(i, 1);
       }
     }
-
   }
 
   // Display
+  Display();
+}
+
+function Display(){
   circleElements.forEach(circleElement => {
     circleElement.display();
   });
-
   lineElements.forEach(lineElement => {
     lineElement.display();
   });
+}
 
+// Save image
+function Export() {
+  var d = new Date();
+  saveCanvas('Export' + d.getDate() + d.getMonth() + d.getFullYear() + d.getHours() + d.getMinutes() + d.getSeconds(), 'jpg');
+}
+
+function GetValue(input){
+  return parseInt(input.value);
+}
+
+function initInputs(){
+  inputContainer = document.getElementById('controls');
+  axisSlider = inputContainer.querySelector('#axisSlider');
+  radiusSlider = inputContainer.querySelector('#radiusSlider');
+  circleDiameterSlider = inputContainer.querySelector('#circleDiameterSlider');
+  lineLengthSlider = inputContainer.querySelector('#lineLengthSlider');
+  lineOuterStepSlider = inputContainer.querySelector('#lineStepSlider');
+  lineInnerStepSlider = inputContainer.querySelector('#lineGapSlider');
+  strokeWeightSlider = inputContainer.querySelector('#strokeWeightSlider');
+  speedSlider = inputContainer.querySelector('#speedSlider');
+
+  axisSlider.value = 6;
+  circleDiameterSlider.value = 100;
+  lineOuterStepSlider.value = 30;
+  lineInnerStepSlider.value = 30;
+  strokeWeightSlider.value = 2;
+
+  if(windowWidth <= 1280){
+    lineLengthSlider.value = 130;
+    radiusSlider.value = 100;
+    radiusSlider.max = 200;
+    lineLengthSlider.max = 200;
+    circleDiameterSlider.max = 300;
+    overshoot = 150;
+  } else {
+    lineLengthSlider.value = 400;
+    radiusSlider.value = 200;
+    radiusSlider.max = 500;
+    circleDiameterSlider.max = 500;
+    overshoot = 250;
+  }
+
+  // Hook up inputs
+  inputs = inputContainer.getElementsByTagName('input');
+  updateInputs();
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
+    input.oninput = function(){
+      processInput(input);
+    }
+  }
+
+  let animationToggle = inputContainer.querySelector('#animationToggle');
+  animationToggle.addEventListener('change', function() {
+    animate = this.checked;
+  });
+
+  animate = animationToggle.checked;
+
+  circleMaxDiameter = parseInt(circleDiameterSlider.max) + overshoot;
+  console.log(circleMaxDiameter);
+
+  inputContainer.querySelector('#export-button').onclick = (function () {
+    Export();
+  })
+
+  inputContainer.querySelector('#randomize-button').onclick = (function () {
+    randomize();
+  })
+}
+
+function randomize(){
+  inputs.forEach(input => {
+    input.value = parseInt(random(input.min, input.max));
+  });
+  updateInputs();
+}
+
+function updateInputs(){
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
+    processInput(input);
+  }
+}
+
+function processInput(input){
+  // Update outputs
+  let output = inputContainer.querySelector('#' + input.id + 'Output');
+  output.value = input.value;
+  // Resize elements
+  circleElements.forEach(element => {
+    element.resize();
+  }); 
+  lineElements.forEach(element => {
+    element.resize();
+  });
+  // Update stroke weight
+  strokeWeight(GetValue(strokeWeightSlider));
+  // Update speed
+  interval = GetValue(speedSlider) * 1000;
+  timer = interval;
+}
+
+function windowResized() {
+  calculateCanvasSize();
+}
+
+function calculateCanvasSize(){
+  if(windowWidth <= 1280){
+    resizeCanvas(windowWidth, windowHeight / 2);
+  } else {
+    resizeCanvas(windowWidth, windowHeight - 100);
+  }
 }
 
 class CircleElement{
@@ -127,8 +245,8 @@ class LineElement{
   }
   resize(){
     this.length = GetValue(lineLengthSlider);
-    this.outerStep = GetValue(lineStepSlider);
-    this.innerStep = GetValue(lineGapSlider);
+    this.outerStep = GetValue(lineOuterStepSlider);
+    this.innerStep = GetValue(lineInnerStepSlider);
   }
   display(){
     // Rotate by the chosen step
@@ -143,108 +261,5 @@ class LineElement{
       }
       pop();  
     }
-  }
-}
-
-// Save image
-function Export() {
-  saveCanvas('Export', 'jpg');
-}
-
-function GetValue(input){
-  return parseInt(input.value);
-}
-
-function initInputs(){
-  inputContainer = document.getElementById('controls');
-  axisSlider = inputContainer.querySelector('#axisSlider');
-  radiusSlider = inputContainer.querySelector('#radiusSlider');
-  circleDiameterSlider = inputContainer.querySelector('#circleDiameterSlider');
-  lineLengthSlider = inputContainer.querySelector('#lineLengthSlider');
-  lineStepSlider = inputContainer.querySelector('#lineStepSlider');
-  lineGapSlider = inputContainer.querySelector('#lineGapSlider');
-  strokeWeightSlider = inputContainer.querySelector('#strokeWeightSlider');
-
-  axisSlider.value = 6;
-  circleDiameterSlider.value = 100;
-  lineStepSlider.value = 30;
-  lineGapSlider.value = 30;
-  strokeWeightSlider.value = 2;
-
-  if(windowWidth <= 1280){
-    lineLengthSlider.value = 130;
-    radiusSlider.value = 100;
-    radiusSlider.max = 200;
-    lineLengthSlider.max = 200;
-  } else {
-    lineLengthSlider.value = 400;
-    radiusSlider.value = 200;
-    radiusSlider.max = 500;
-  }
-
-  // Hook up inputs
-  inputs = inputContainer.getElementsByTagName('input');
-  updateInputs();
-  for (let i = 0; i < inputs.length; i++) {
-    const input = inputs[i];
-    input.oninput = function(){
-      processInput(input);
-    }
-  }
-
-  let animationToggle = inputContainer.querySelector('#animationToggle');
-  animationToggle.addEventListener('change', function() {
-    animate = this.checked;
-  });
-
-  animate = animationToggle.checked;
-
-  inputContainer.querySelector('#export-button').onclick = (function () {
-    Export();
-  })
-
-  inputContainer.querySelector('#randomize-button').onclick = (function () {
-    randomize();
-  })
-}
-
-function randomize(){
-  inputs.forEach(input => {
-    input.value = parseInt(random(input.min, input.max));
-  });
-  updateInputs();
-}
-
-function updateInputs(){
-  for (let i = 0; i < inputs.length; i++) {
-    const input = inputs[i];
-    processInput(input);
-  }
-}
-
-function processInput(input){
-  // Update outputs
-  let output = inputContainer.querySelector('#' + input.id + 'Output');
-  output.value = input.value;
-  // Resize elements
-  circleElements.forEach(element => {
-    element.resize();
-  }); 
-  lineElements.forEach(element => {
-    element.resize();
-  });
-  // Update stroke weight
-  strokeWeight(GetValue(strokeWeightSlider));
-}
-
-function windowResized() {
-  calculateCanvasSize();
-}
-
-function calculateCanvasSize(){
-  if(windowWidth <= 1280){
-    resizeCanvas(windowWidth, windowHeight / 2);
-  } else {
-    resizeCanvas(windowWidth, windowHeight - 100);
   }
 }

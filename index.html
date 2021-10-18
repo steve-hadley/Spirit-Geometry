@@ -17,10 +17,15 @@
         <div id="p5js-container"></div>
         <form>
           <div id="controls">
+            <button id="randomize-button" type="button" class="btn btn-primary my-3">Randomize</button>
             <div class="form-check form-switch mb-2">
               <input class="form-check-input" type="checkbox" id="animationToggle" checked>
               <label id="animationToggleOutput" class="form-check-label" for="animationToggle">Animate</label>
             </div>
+            <div class="clearfix"></div>
+            <label class="form-label">Speed:</label>
+            <output id="speedSliderOutput"></output>
+            <input type="range" class="form-range" min="1" max="10" step="1" id="speedSlider">
             <label class="form-label">Circle count:</label>
             <output id="axisSliderOutput"></output>
             <input type="range" class="form-range" min="4" max="40" step="2" id="axisSlider">
@@ -42,8 +47,6 @@
             <label class="form-label">Stroke weight:</label>
             <output id="strokeWeightSliderOutput"></output>
             <input type="range" class="form-range" min="1" max="5" step="1" id="strokeWeightSlider">
-            <button id="randomize-button" type="button" class="btn btn-primary mt-3">Randomize</button>
-            <div class="clearfix"></div>
             <button id="export-button" type="button" class="btn btn-primary mt-4">Export</button>
             <div class="spacer"></div>
           </div>
