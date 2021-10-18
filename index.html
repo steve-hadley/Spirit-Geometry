@@ -23,9 +23,14 @@
               <label id="animationToggleOutput" class="form-check-label" for="animationToggle">Animate</label>
             </div>
             <div class="clearfix"></div>
-            <label class="form-label">Speed:</label>
-            <output id="speedSliderOutput"></output>
-            <input type="range" class="form-range" min="1" max="10" step="1" id="speedSlider">
+            <span id="animation-controls">
+              <label class="form-label">Speed:</label>
+              <output id="speedSliderOutput"></output>
+              <input type="range" class="form-range" min="1" max="10" step="1" id="speedSlider">
+              <label class="form-label">Frequency:</label>
+              <output id="frequencySliderOutput"></output>
+              <input type="range" class="form-range" min="8" max="10" step="1" id="frequencySlider">
+            </span>
             <label class="form-label">Circle count:</label>
             <output id="axisSliderOutput"></output>
             <input type="range" class="form-range" min="4" max="40" step="2" id="axisSlider">

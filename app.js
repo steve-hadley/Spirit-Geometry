@@ -6,6 +6,14 @@
 let circleElements = [];
 let lineElements = [];
 
+// Animation
+let animate = false;
+let speed = 0;
+let timer = 0;
+let frequency = 0;
+let circleMaxDiameter;
+let overshoot;
+
 // Input
 let inputs = [];
 let inputContainer;
@@ -16,13 +24,8 @@ let lineLengthSlider;
 let lineOuterStepSlider;
 let lineInnerStepSlider;
 let strokeWeightSlider;
-
-// Animation
-let animate = false;
-let timer = 0;
-let interval = 4000;
-let circleMaxDiameter;
-let overshoot;
+let speedSlider;
+let frequencySlider;
 
 function setup() {
   var canvas = createCanvas();
@@ -57,7 +60,7 @@ function draw(){
   // Animate
   if(animate){
     // Every x seconds
-    if(millis() >= interval + timer){
+    if(millis() >= frequency + timer){
       // Spawn new circle
       var circleElement = new CircleElement();
       circleElement.diameter = 0;
@@ -107,6 +110,7 @@ function initInputs(){
   lineInnerStepSlider = inputContainer.querySelector('#lineGapSlider');
   strokeWeightSlider = inputContainer.querySelector('#strokeWeightSlider');
   speedSlider = inputContainer.querySelector('#speedSlider');
+  frequencySlider = inputContainer.querySelector('#frequencySlider');
 
   axisSlider.value = 6;
   circleDiameterSlider.value = 100;
@@ -142,6 +146,12 @@ function initInputs(){
   let animationToggle = inputContainer.querySelector('#animationToggle');
   animationToggle.addEventListener('change', function() {
     animate = this.checked;
+    var animationControls = inputContainer.querySelector('#animation-controls');
+    if(animate){
+      animationControls.style.display = "block";
+    } else {
+      animationControls.style.display = "none";
+    }
   });
 
   animate = animationToggle.checked;
@@ -186,8 +196,10 @@ function processInput(input){
   // Update stroke weight
   strokeWeight(GetValue(strokeWeightSlider));
   // Update speed
-  interval = GetValue(speedSlider) * 1000;
-  timer = interval;
+  speed = GetValue(speedSlider);
+  frequency = (parseInt(frequencySlider.max) + 1 - GetValue(frequencySlider)) * 1000;
+  console.log(frequency);
+  timer = frequency;
 }
 
 function windowResized() {
@@ -214,7 +226,7 @@ class CircleElement{
     this.alpha = 1;
   }
   expand(){
-    this.diameter += 1;
+    this.diameter += speed;
   }
   reset(){
     this.diameter = 0;
