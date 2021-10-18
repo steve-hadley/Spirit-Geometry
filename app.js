@@ -157,7 +157,6 @@ function initInputs(){
   animate = animationToggle.checked;
 
   circleMaxDiameter = parseInt(circleDiameterSlider.max) + overshoot;
-  console.log(circleMaxDiameter);
 
   inputContainer.querySelector('#export-button').onclick = (function () {
     Export();
@@ -198,7 +197,6 @@ function processInput(input){
   // Update speed
   speed = GetValue(speedSlider);
   frequency = (parseInt(frequencySlider.max) + 1 - GetValue(frequencySlider)) * 1000;
-  console.log(frequency);
   timer = frequency;
 }
 
