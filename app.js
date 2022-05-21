@@ -57,6 +57,9 @@ function draw(){
   background(0);
   translate(width / 2, height / 2);
 
+  drawingContext.shadowBlur = 30;
+  drawingContext.shadowColor = color(255, 255, 255);
+
   // Animate
   if(animate){
     // Every x seconds
