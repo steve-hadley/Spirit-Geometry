@@ -66,11 +66,8 @@ function draw(){
   drawPoints();
 
   // Main loop
-  // background(0);
-  // translate(width / 2, height / 2);
-
-  // drawingContext.shadowBlur = 30;
-  // drawingContext.shadowColor = color(255, 255, 255);
+  drawingContext.shadowBlur = 100;
+  drawingContext.shadowColor = color(255, 255, 255);
 
   // Animate
   // if(animate){
@@ -136,7 +133,7 @@ function GetValue(input){
 
 function randomizeInputs(){
   inputs.forEach(input => {
-    input.value = parseInt(random(input.min, input.max));
+    input.value = getRandomArbitrary(input.min, input.max);
   });
   updateInputs();
 }
@@ -154,6 +151,7 @@ function processInput(input){
   output.value = input.value;
   
   axisCount = GetValue(axisSlider);
+
   axisStep = 360 / axisCount;
   
   radius = GetValue(radiusSlider);
@@ -252,4 +250,8 @@ function gradientLine(x1, y1, x2, y2, color1, color2) {
 
   line(x1, y1, x2, y2);
   ellipse(point.x, point.y, 400)
+}
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
 }
