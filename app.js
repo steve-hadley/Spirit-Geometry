@@ -2,11 +2,12 @@
 // @Vectris
 // https://vectr.is/
 
-let rotationSegments = 8;
-let rotationStep;
+let axisCount = 8;
+let axisStep;
 
 let radius;
 let points = [];
+let circleRadius = 0;
 
 // Animation
 let animate = false;
@@ -21,10 +22,7 @@ let inputs = [];
 let inputContainer;
 let axisSlider;
 let radiusSlider;
-let circleDiameterSlider;
-let lineLengthSlider;
-let lineOuterStepSlider;
-let lineInnerStepSlider;
+let circleRadiusSlider;
 let strokeWeightSlider;
 let speedSlider;
 let frequencySlider;
@@ -52,40 +50,21 @@ function setup() {
   noFill();
   stroke(1);
   strokeWeight(3);
-  
-  rotationStep = 360 / rotationSegments;
 
-  translate(width / 2, height / 2);
-
-  // Generate points
-  let theta = 0;
-  for (let i = 0; i < rotationSegments; i++) {
-    let x = sin(theta) * radius;
-    let y = cos(theta) * radius;
-    points.push({x,y});
-    point(x, y);
-    theta += rotationStep;
-  }
-
-  // Draw ellipses at points
-  for (let i = 0; i < points.length; i++) {
-    let point = points[i];
-    ellipse(point.x, point.y, 400)
-  }
-
-  // Draw lines between points
-  for (let i = 0; i < points.length; i++) {
-    for (let j = 0; j < points.length; j++) {
-      let point1 = points[i];
-      let point2 = points[j];
-      line(point1.x, point1.y, point2.x, point2.y);
-      gradientLine(point1.x, point1.y, point2.x, point2.y, "blue", "purple")
-    }    
-  }
-
+  generatePoints();
 }
 
 function draw(){
+  background(0);
+
+  translate(width / 2, height / 2);
+
+  updateInputs();
+
+  generatePoints();
+
+  drawPoints();
+
   // Main loop
   // background(0);
   // translate(width / 2, height / 2);
@@ -114,6 +93,36 @@ function draw(){
   // }
 }
 
+function generatePoints(){
+  points = [];
+  // Generate points
+  let theta = 0;
+  for (let i = 0; i < axisCount; i++) {
+    let x = sin(theta) * radius;
+    let y = cos(theta) * radius;
+    points.push({x,y});
+    point(x, y);
+    theta += axisStep;
+  }
+}
+
+function drawPoints(){
+    // Draw ellipses at points
+    for (let i = 0; i < points.length; i++) {
+      let point = points[i];
+      ellipse(point.x, point.y, circleRadius * 2)
+    }
+  
+    // Draw lines between points
+    for (let i = 0; i < points.length; i++) {
+      for (let j = 0; j < points.length; j++) {
+        let point1 = points[i];
+        let point2 = points[j];
+        line(point1.x, point1.y, point2.x, point2.y);
+        // gradientLine(point1.x, point1.y, point2.x, point2.y, "blue", "purple")
+      }    
+    }
+}
 
 // Save image
 function Export() {
@@ -143,8 +152,13 @@ function processInput(input){
   // Update outputs
   let output = inputContainer.querySelector('#' + input.id + 'Output');
   output.value = input.value;
+  
+  axisCount = GetValue(axisSlider);
+  axisStep = 360 / axisCount;
+  
+  radius = GetValue(radiusSlider);
 
-  // Resize elements
+  circleRadius = GetValue(circleRadiusSlider);
 
   // Update stroke weight
   strokeWeight(GetValue(strokeWeightSlider));
@@ -171,32 +185,24 @@ function initInputs(){
   inputContainer = document.getElementById('controls');
   axisSlider = inputContainer.querySelector('#axisSlider');
   radiusSlider = inputContainer.querySelector('#radiusSlider');
-  circleDiameterSlider = inputContainer.querySelector('#circleDiameterSlider');
-  lineLengthSlider = inputContainer.querySelector('#lineLengthSlider');
-  lineOuterStepSlider = inputContainer.querySelector('#lineStepSlider');
-  lineInnerStepSlider = inputContainer.querySelector('#lineGapSlider');
+  circleRadiusSlider = inputContainer.querySelector('#circleDiameterSlider');
   strokeWeightSlider = inputContainer.querySelector('#strokeWeightSlider');
   speedSlider = inputContainer.querySelector('#speedSlider');
   frequencySlider = inputContainer.querySelector('#frequencySlider');
 
   axisSlider.value = 6;
-  circleDiameterSlider.value = 100;
-  lineOuterStepSlider.value = 30;
-  lineInnerStepSlider.value = 30;
+  circleRadiusSlider.value = 100;
   strokeWeightSlider.value = 2;
 
   if(windowWidth <= 1280){
-    lineLengthSlider.value = 130;
     radiusSlider.value = 100;
     radiusSlider.max = 200;
-    lineLengthSlider.max = 200;
-    circleDiameterSlider.max = 300;
+    circleRadiusSlider.max = 300;
     overshoot = 150;
   } else {
-    lineLengthSlider.value = 400;
     radiusSlider.value = 200;
     radiusSlider.max = 500;
-    circleDiameterSlider.max = 500;
+    circleRadiusSlider.max = 500;
     overshoot = 250;
   }
 
@@ -225,7 +231,7 @@ function initInputs(){
 
   animate = animationToggle.checked;
 
-  circleMaxDiameter = parseInt(circleDiameterSlider.max) + overshoot;
+  circleMaxDiameter = parseInt(circleRadiusSlider.max) + overshoot;
 
   inputContainer.querySelector('#export-button').onclick = (function () {
     Export();
