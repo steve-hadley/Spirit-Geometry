@@ -1,10 +1,12 @@
 // Sacred Geometry Generator
-// Steve Hadley
+// @Vectris
 // https://vectr.is/
 
-// Objects
-let circleElements = [];
-let lineElements = [];
+let rotationSegments = 8;
+let rotationStep;
+
+let radius;
+let points = [];
 
 // Animation
 let animate = false;
@@ -42,56 +44,76 @@ function setup() {
   stroke(255);
   strokeWeight(3);
 
-  var circleElement = new CircleElement();
-  if(animate){
-    circleElement.diameter = 0;
-  }
-  circleElements.push(circleElement);
+  background(0);
+  radius = 100;
+  colorMode(HSB, 1);
+  // createLoop({duration:10, gif:true})
+  angleMode(DEGREES);
+  noFill();
+  stroke(1);
+  strokeWeight(3);
+  
+  rotationStep = 360 / rotationSegments;
 
-  var lineElement = new LineElement();
-  lineElements.push(lineElement);
+  translate(width / 2, height / 2);
+
+  // Generate points
+  let theta = 0;
+  for (let i = 0; i < rotationSegments; i++) {
+    let x = sin(theta) * radius;
+    let y = cos(theta) * radius;
+    points.push({x,y});
+    point(x, y);
+    theta += rotationStep;
+  }
+
+  // Draw ellipses at points
+  for (let i = 0; i < points.length; i++) {
+    let point = points[i];
+    ellipse(point.x, point.y, 400)
+  }
+
+  // Draw lines between points
+  for (let i = 0; i < points.length; i++) {
+    for (let j = 0; j < points.length; j++) {
+      let point1 = points[i];
+      let point2 = points[j];
+      line(point1.x, point1.y, point2.x, point2.y);
+      gradientLine(point1.x, point1.y, point2.x, point2.y, "blue", "purple")
+    }    
+  }
+
 }
 
 function draw(){
   // Main loop
-  background(0);
-  translate(width / 2, height / 2);
+  // background(0);
+  // translate(width / 2, height / 2);
 
-  drawingContext.shadowBlur = 30;
-  drawingContext.shadowColor = color(255, 255, 255);
+  // drawingContext.shadowBlur = 30;
+  // drawingContext.shadowColor = color(255, 255, 255);
 
   // Animate
-  if(animate){
-    // Every x seconds
-    if(millis() >= frequency + timer){
-      // Spawn new circle
-      var circleElement = new CircleElement();
-      circleElement.diameter = 0;
-      circleElements.push(circleElement);
-      timer = millis();
-    }
-    // Animate current circles
-    for (let i = 0; i < circleElements.length; i++) {
-      circleElements[i].expand();
-      // Remove dead circles
-      if(circleElements[i].diameter >= circleMaxDiameter){
-        circleElements.splice(i, 1);
-      }
-    }
-  }
-
-  // Display
-  Display();
+  // if(animate){
+  //   // Every x seconds
+  //   if(millis() >= frequency + timer){
+  //     // Spawn new circle
+  //     var circleElement = new CircleElement();
+  //     circleElement.diameter = 0;
+  //     circleElements.push(circleElement);
+  //     timer = millis();
+  //   }
+  //   // Animate current circles
+  //   for (let i = 0; i < circleElements.length; i++) {
+  //     circleElements[i].expand();
+  //     // Remove dead circles
+  //     if(circleElements[i].diameter >= circleMaxDiameter){
+  //       circleElements.splice(i, 1);
+  //     }
+  //   }
+  // }
 }
 
-function Display(){
-  circleElements.forEach(circleElement => {
-    circleElement.display();
-  });
-  lineElements.forEach(lineElement => {
-    lineElement.display();
-  });
-}
 
 // Save image
 function Export() {
@@ -101,6 +123,48 @@ function Export() {
 
 function GetValue(input){
   return parseInt(input.value);
+}
+
+function randomizeInputs(){
+  inputs.forEach(input => {
+    input.value = parseInt(random(input.min, input.max));
+  });
+  updateInputs();
+}
+
+function updateInputs(){
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
+    processInput(input);
+  }
+}
+
+function processInput(input){
+  // Update outputs
+  let output = inputContainer.querySelector('#' + input.id + 'Output');
+  output.value = input.value;
+
+  // Resize elements
+
+  // Update stroke weight
+  strokeWeight(GetValue(strokeWeightSlider));
+
+  // Update speed
+  speed = GetValue(speedSlider);
+  frequency = (parseInt(frequencySlider.max) + 1 - GetValue(frequencySlider)) * 1000;
+  timer = frequency;
+}
+
+function windowResized() {
+  calculateCanvasSize();
+}
+
+function calculateCanvasSize(){
+  if(windowWidth <= 1280){
+    resizeCanvas(windowWidth, windowHeight / 2);
+  } else {
+    resizeCanvas(windowWidth, windowHeight - 100);
+  }
 }
 
 function initInputs(){
@@ -138,7 +202,9 @@ function initInputs(){
 
   // Hook up inputs
   inputs = inputContainer.getElementsByTagName('input');
+  
   updateInputs();
+
   for (let i = 0; i < inputs.length; i++) {
     const input = inputs[i];
     input.oninput = function(){
@@ -166,113 +232,18 @@ function initInputs(){
   })
 
   inputContainer.querySelector('#randomize-button').onclick = (function () {
-    randomize();
+    randomizeInputs();
   })
 }
 
-function randomize(){
-  inputs.forEach(input => {
-    input.value = parseInt(random(input.min, input.max));
-  });
-  updateInputs();
-}
+function gradientLine(x1, y1, x2, y2, color1, color2) {
+  // linear gradient from start to end of line
+  var grad = this.drawingContext.createLinearGradient(x1, y1, x2, y2);
+  grad.addColorStop(0, color1);
+  grad.addColorStop(1, color2);
 
-function updateInputs(){
-  for (let i = 0; i < inputs.length; i++) {
-    const input = inputs[i];
-    processInput(input);
-  }
-}
+  this.drawingContext.strokeStyle = grad;
 
-function processInput(input){
-  // Update outputs
-  let output = inputContainer.querySelector('#' + input.id + 'Output');
-  output.value = input.value;
-  // Resize elements
-  circleElements.forEach(element => {
-    element.resize();
-  }); 
-  lineElements.forEach(element => {
-    element.resize();
-  });
-  // Update stroke weight
-  strokeWeight(GetValue(strokeWeightSlider));
-  // Update speed
-  speed = GetValue(speedSlider);
-  frequency = (parseInt(frequencySlider.max) + 1 - GetValue(frequencySlider)) * 1000;
-  timer = frequency;
-}
-
-function windowResized() {
-  calculateCanvasSize();
-}
-
-function calculateCanvasSize(){
-  if(windowWidth <= 1280){
-    resizeCanvas(windowWidth, windowHeight / 2);
-  } else {
-    resizeCanvas(windowWidth, windowHeight - 100);
-  }
-}
-
-class CircleElement{
-  constructor(){
-    this.resize();
-  }
-  resize(){
-    this.axis = GetValue(axisSlider);
-    this.step = TWO_PI / this.axis;
-    this.diameter = GetValue(circleDiameterSlider);
-    this.radius = GetValue(radiusSlider);
-    this.alpha = 1;
-  }
-  expand(){
-    this.diameter += speed;
-  }
-  reset(){
-    this.diameter = 0;
-  }
-  display(){
-    let alpha = 1.0 - (this.diameter / circleMaxDiameter);
-    stroke(255, 255, 255, alpha);
-    // Draw center circle
-    circle(0, 0, this.diameter);
-    // Angle to rotate by
-    this.theta = 0;
-    let pos = createVector();
-    // Rotate as per axis count, incrementing the angle by the chosen step size
-    for (let i = 0; i < this.axis; i++) {
-      this.theta += this.step;
-      // Polar to cartesian coordinate conversion
-      pos.x = this.radius * cos(this.theta);
-      pos.y = this.radius * sin(this.theta);
-      // Draw circle
-      circle(pos.x, pos.y, this.diameter);
-    }
-  }
-}
-
-class LineElement{
-  constructor(){
-    this.resize();
-  }
-  resize(){
-    this.length = GetValue(lineLengthSlider);
-    this.outerStep = GetValue(lineOuterStepSlider);
-    this.innerStep = GetValue(lineInnerStepSlider);
-  }
-  display(){
-    // Rotate by the chosen step
-    for (let a = 0; a < 360; a += this.outerStep){
-      push();
-      rotate(radians(a));
-      // Draw lines in a wave pattern with a variable dispersion
-      for (let r = 0; r < 180; r += this.innerStep) {
-        // Rad method of creating line lengths in a wave pattern, inspired by https://linktr.ee/thedotiswhite
-        stroke(255, 255, 255, 1);
-        line(sin(radians(r)) * this.length, cos(radians(r)) * this.length, sin(radians(-r)) * this.length, cos(radians(-r)) * this.length);
-      }
-      pop();  
-    }
-  }
+  line(x1, y1, x2, y2);
+  ellipse(point.x, point.y, 400)
 }
