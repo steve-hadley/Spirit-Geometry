@@ -2,12 +2,15 @@
 // @Vectris
 // https://vectr.is/
 
-let axisCount = 8;
-let axisStep;
+let variables = {
+  radius: 100,
+  axisCount: 8,
+  circleRadius: 100,
+  export:function(){ Export();}
+}
 
-let radius;
+let axisStep;
 let points = [];
-let circleRadius = 0;
 
 // Animation
 let animate = false;
@@ -17,23 +20,17 @@ let frequency = 0;
 let circleMaxDiameter;
 let overshoot;
 
-// Input
-let inputs = [];
-let inputContainer;
-let axisSlider;
-let radiusSlider;
-let circleRadiusSlider;
-let strokeWeightSlider;
-let speedSlider;
-let frequencySlider;
+let gui = new dat.GUI();
 
 function setup() {
   var canvas = createCanvas();
   canvas.parent('p5js-container');
   colorMode(RGB, 255, 255, 255, 1);
 
-  // Initialize inputs
-  initInputs();
+  gui.add(variables, 'radius', 0, 255);
+  gui.add(variables, 'axisCount', 3, 10, 1);
+  gui.add(variables, 'circleRadius', 0, 255);
+  gui.add(variables, 'export');
 
   // Calculate canvas size in order to adapt to screen size
   calculateCanvasSize();
@@ -43,7 +40,6 @@ function setup() {
   strokeWeight(3);
 
   background(0);
-  radius = 100;
   colorMode(HSB, 1);
   // createLoop({duration:10, gif:true})
   angleMode(DEGREES);
@@ -59,7 +55,7 @@ function draw(){
 
   translate(width / 2, height / 2);
 
-  updateInputs();
+  axisStep = 360 / variables.axisCount;
 
   generatePoints();
 
@@ -94,9 +90,9 @@ function generatePoints(){
   points = [];
   // Generate points
   let theta = 0;
-  for (let i = 0; i < axisCount; i++) {
-    let x = sin(theta) * radius;
-    let y = cos(theta) * radius;
+  for (let i = 0; i < variables.axisCount; i++) {
+    let x = sin(theta) * variables.radius;
+    let y = cos(theta) * variables.radius;
     points.push({x,y});
     point(x, y);
     theta += axisStep;
@@ -107,7 +103,7 @@ function drawPoints(){
     // Draw ellipses at points
     for (let i = 0; i < points.length; i++) {
       let point = points[i];
-      ellipse(point.x, point.y, circleRadius * 2)
+      ellipse(point.x, point.y, variables.circleRadius * 2)
     }
   
     // Draw lines between points
@@ -127,46 +123,6 @@ function Export() {
   saveCanvas('Export' + d.getDate() + d.getMonth() + d.getFullYear() + d.getHours() + d.getMinutes() + d.getSeconds(), 'jpg');
 }
 
-function GetValue(input){
-  return parseInt(input.value);
-}
-
-function randomizeInputs(){
-  inputs.forEach(input => {
-    input.value = getRandomArbitrary(input.min, input.max);
-  });
-  updateInputs();
-}
-
-function updateInputs(){
-  for (let i = 0; i < inputs.length; i++) {
-    const input = inputs[i];
-    processInput(input);
-  }
-}
-
-function processInput(input){
-  // Update outputs
-  let output = inputContainer.querySelector('#' + input.id + 'Output');
-  output.value = input.value;
-  
-  axisCount = GetValue(axisSlider);
-
-  axisStep = 360 / axisCount;
-  
-  radius = GetValue(radiusSlider);
-
-  circleRadius = GetValue(circleRadiusSlider);
-
-  // Update stroke weight
-  strokeWeight(GetValue(strokeWeightSlider));
-
-  // Update speed
-  speed = GetValue(speedSlider);
-  frequency = (parseInt(frequencySlider.max) + 1 - GetValue(frequencySlider)) * 1000;
-  timer = frequency;
-}
-
 function windowResized() {
   calculateCanvasSize();
 }
@@ -177,67 +133,6 @@ function calculateCanvasSize(){
   } else {
     resizeCanvas(windowWidth, windowHeight - 100);
   }
-}
-
-function initInputs(){
-  inputContainer = document.getElementById('controls');
-  axisSlider = inputContainer.querySelector('#axisSlider');
-  radiusSlider = inputContainer.querySelector('#radiusSlider');
-  circleRadiusSlider = inputContainer.querySelector('#circleDiameterSlider');
-  strokeWeightSlider = inputContainer.querySelector('#strokeWeightSlider');
-  speedSlider = inputContainer.querySelector('#speedSlider');
-  frequencySlider = inputContainer.querySelector('#frequencySlider');
-
-  axisSlider.value = 6;
-  circleRadiusSlider.value = 100;
-  strokeWeightSlider.value = 2;
-
-  if(windowWidth <= 1280){
-    radiusSlider.value = 100;
-    radiusSlider.max = 200;
-    circleRadiusSlider.max = 300;
-    overshoot = 150;
-  } else {
-    radiusSlider.value = 200;
-    radiusSlider.max = 500;
-    circleRadiusSlider.max = 500;
-    overshoot = 250;
-  }
-
-  // Hook up inputs
-  inputs = inputContainer.getElementsByTagName('input');
-  
-  updateInputs();
-
-  for (let i = 0; i < inputs.length; i++) {
-    const input = inputs[i];
-    input.oninput = function(){
-      processInput(input);
-    }
-  }
-
-  let animationToggle = inputContainer.querySelector('#animationToggle');
-  animationToggle.addEventListener('change', function() {
-    animate = this.checked;
-    var animationControls = inputContainer.querySelector('#animation-controls');
-    if(animate){
-      animationControls.style.display = "block";
-    } else {
-      animationControls.style.display = "none";
-    }
-  });
-
-  animate = animationToggle.checked;
-
-  circleMaxDiameter = parseInt(circleRadiusSlider.max) + overshoot;
-
-  inputContainer.querySelector('#export-button').onclick = (function () {
-    Export();
-  })
-
-  inputContainer.querySelector('#randomize-button').onclick = (function () {
-    randomizeInputs();
-  })
 }
 
 function gradientLine(x1, y1, x2, y2, color1, color2) {

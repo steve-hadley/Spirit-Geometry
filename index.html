@@ -10,44 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="libraries/p5.min.js"></script>
+    <script src="libraries/dat.gui.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
   </head>
   <body>
     <div class="container-fluid">
       <div class="row">
         <div id="p5js-container"></div>
-        <form>
-          <div id="controls">
-            <button id="randomize-button" type="button" class="btn btn-primary my-3">Randomize</button>
-            <div class="form-check form-switch mb-2">
-              <input class="form-check-input" type="checkbox" id="animationToggle" checked>
-              <label id="animationToggleOutput" class="form-check-label" for="animationToggle">Animate</label>
-            </div>
-            <div class="clearfix"></div>
-            <span id="animation-controls">
-              <label class="form-label">Speed:</label>
-              <output id="speedSliderOutput"></output>
-              <input type="range" class="form-range" min="1" max="10" step="1" id="speedSlider">
-              <label class="form-label">Frequency:</label>
-              <output id="frequencySliderOutput"></output>
-              <input type="range" class="form-range" min="4" max="40" step="1" id="frequencySlider">
-            </span>
-            <label class="form-label">Axis count:</label>
-            <output id="axisSliderOutput"></output>
-            <input type="range" class="form-range" min="3" max="10" step="1" id="axisSlider">
-            <label class="form-label">Circle diameter:</label>
-            <output id="circleDiameterSliderOutput"></output>
-            <input type="range" class="form-range" min="10" max="500" step="1" id="circleDiameterSlider">
-            <label class="form-label">Circle offset:</label>
-            <output id="radiusSliderOutput"></output>
-            <input type="range" class="form-range" min="50" max="500" step="1" id="radiusSlider">
-            <label class="form-label">Stroke weight:</label>
-            <output id="strokeWeightSliderOutput"></output>
-            <input type="range" class="form-range" min="1" max="5" step="1" id="strokeWeightSlider">
-            <button id="export-button" type="button" class="btn btn-primary mt-4">Export</button>
-            <div class="spacer"></div>
-          </div>
-        </form>
         <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
