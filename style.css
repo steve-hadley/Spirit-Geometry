@@ -11,63 +11,6 @@ div#p5js-container {
   justify-content: center;
   align-items: center;
 }
-label {
-    color: white;
-}
-output {
-  color: white;
-}
-.spacer {
-  height: 20px;
-}
-/* Desktops */
-@media (min-width: 1281px) {
-  #controls{
-    position: absolute;
-    width: 300px;
-    top: 20px;
-    left: 10px;
-  }
-  span#link {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    margin-bottom: 0px !important;
-  }
-}
-
-.copyleft {
-  display:inline-block;
-  transform: rotate(180deg);
-}
-
-span#link {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-/* Laptops */
-@media (min-width: 1025px) and (max-width: 1280px) {
-    
-}
-
-/* Tablets, Ipads (portrait) */
-@media (min-width: 768px) and (max-width: 1024px) {
-  
-}
-
-/* Tablets, Ipads (landscape) */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  
-}
-
-/* Low Resolution Tablets, Mobiles (Landscape) */
-@media (min-width: 481px) and (max-width: 767px) {
-  
-}
-
-/* Most of the Smartphones Mobiles (Portrait) */
-@media (min-width: 320px) and (max-width: 480px) {
-    
+.dg .property-name {
+  text-transform: capitalize;
 }

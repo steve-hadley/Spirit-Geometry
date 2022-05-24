@@ -63,7 +63,7 @@ function draw(){
 
   // Main loop
   drawingContext.shadowBlur = 100;
-  drawingContext.shadowColor = color(255, 255, 255);
+  drawingContext.shadowColor = color(1, 1, 1);
 
   // Animate
   // if(animate){
