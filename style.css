@@ -14,19 +14,17 @@ div#p5js-container {
 .dg .property-name {
   text-transform: capitalize;
 }
-
+#guiContainer {
+  position: fixed;
+  right: 0;
+}
 @media screen and (min-width: 900px) {
   #guiContainer {
-    position: fixed;
     top: 0;
-    right: 0;
   }
 }
-
 @media screen and (max-width: 900px) {
   #guiContainer {
-    position: fixed;
-    bottom: 0 !important;
-    right: 0;
+    bottom: 0;
   }
 }

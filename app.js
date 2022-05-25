@@ -4,6 +4,7 @@
 
 let rotationStep;
 let points = [];
+let colour;
 
 // Animation
 let animate = false;
@@ -17,19 +18,18 @@ let time = 0;
 
 let guiElements = {
   innerRadius: 100,
-  axisCount: 8,
+  segments: 8,
   outerRadius: 100,
-  bloom: 10,
-  lineThickness: 2,
+  bloom: 30,
+  lineThickness: 1,
   randomize:function(){ Randomize();},
   capture:function(){ Export();},
-  Author:function(){ window.open("https://vectr.is/", '_blank').focus(); }
+  Author:function(){ window.open("https://x.vectr.is/", '_blank').focus(); }
 }
+
 let gui = new dat.GUI({ autoPlace: false });
 gui.domElement.id = 'gui';
 document.getElementById('guiContainer').appendChild(gui.domElement);
-
-let lineColour;
 
 function setup() {
   var canvas = createCanvas();
@@ -46,14 +46,14 @@ function setup() {
   // createLoop({duration:10, gif:true})
   angleMode(DEGREES);
   noFill();
-  lineColour = color(1,1,1);
-  stroke(lineColour);
+  colour = color(1,1,1);
+  stroke(colour);
   strokeWeight(guiElements.lineThickness);
 
   generatePoints();
 
   gui.add(guiElements, 'randomize');
-  gui.add(guiElements, 'axisCount', 3, 10, 1).listen();
+  gui.add(guiElements, 'segments', 3, 10, 1).listen();
   gui.add(guiElements, 'innerRadius', 0, 255).listen();
   gui.add(guiElements, 'outerRadius', 0, 255).listen();
   gui.add(guiElements, 'bloom', 0, 100).listen();
@@ -62,56 +62,38 @@ function setup() {
   gui.add(guiElements, 'Author');
 }
 
-function convertColour(color){
-  return RGBToHSL(color[0], color[1], color[2]);
-}
-
 function draw(){
+  // Clear canvas
   background(0);
-
-  drawingContext.shadowBlur = guiElements.bloom;
-  drawingContext.shadowColor = lineColour;
-
-  lineColour = color(map(sin(time), -1, 1, 0, 1), 1, 0.5);
-  stroke(lineColour);
-  strokeWeight(guiElements.lineThickness);
-
   translate(width / 2, height / 2);
 
-  rotationStep = 360 / guiElements.axisCount;
+  // Prep postFX
+  drawingContext.shadowBlur = guiElements.bloom;
+  drawingContext.shadowColor = colour;
 
-  generatePoints();
+  // Cycle colour
+  colour = color(map(sin(time), -1, 1, 0, 1), 1, 0.5);
+  stroke(colour);
 
-  drawPoints();
+  // Update variables based on GUI
+  strokeWeight(guiElements.lineThickness);
+  rotationStep = 360 / guiElements.segments;
 
-  // Animate
-  // if(animate){
-  //   // Every x seconds
-  //   if(millis() >= frequency + timer){
-  //     // Spawn new circle
-  //     var circleElement = new CircleElement();
-  //     circleElement.diameter = 0;
-  //     circleElements.push(circleElement);
-  //     timer = millis();
-  //   }
-  //   // Animate current circles
-  //   for (let i = 0; i < circleElements.length; i++) {
-  //     circleElements[i].expand();
-  //     // Remove dead circles
-  //     if(circleElements[i].diameter >= circleMaxDiameter){
-  //       circleElements.splice(i, 1);
-  //     }
-  //   }
-  // }
+  generateGeo();
 
   time += deltaTime * 0.01;
+}
+
+function generateGeo(){
+  generatePoints();
+  drawPoints();
 }
 
 function generatePoints(){
   points = [];
   // Generate points
   let theta = 0;
-  for (let i = 0; i < guiElements.axisCount; i++) {
+  for (let i = 0; i < guiElements.segments; i++) {
     let x = sin(theta) * guiElements.innerRadius;
     let y = cos(theta) * guiElements.innerRadius;
     points.push({x,y});
@@ -180,6 +162,10 @@ function gradientLine(x1, y1, x2, y2, color1, color2) {
 
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function convertColour(color){
+  return RGBToHSL(color[0], color[1], color[2]);
 }
 
 function RGBToHSL(r, g, b) {
