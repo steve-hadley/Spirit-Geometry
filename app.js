@@ -22,9 +22,13 @@ let guiElements = {
   bloom: 10,
   lineThickness: 2,
   randomize:function(){ Randomize();},
-  capture:function(){ Export();}
+  capture:function(){ Export();},
+  Author:function(){ window.open("https://vectr.is/", '_blank').focus(); }
 }
-let gui = new dat.GUI();
+let gui = new dat.GUI({ autoPlace: false });
+gui.domElement.id = 'gui';
+document.getElementById('guiContainer').appendChild(gui.domElement);
+
 let lineColour;
 
 function setup() {
@@ -55,6 +59,7 @@ function setup() {
   gui.add(guiElements, 'bloom', 0, 100).listen();
   gui.add(guiElements, 'lineThickness', 1, 5).listen();
   gui.add(guiElements, 'capture');
+  gui.add(guiElements, 'Author');
 }
 
 function convertColour(color){
@@ -154,7 +159,7 @@ function windowResized() {
 }
 
 function calculateCanvasSize(){
-  if(windowWidth <= 1280){
+  if(windowWidth < windowHeight){
     resizeCanvas(windowWidth, windowWidth);
   } else {
     resizeCanvas(windowHeight, windowHeight);
