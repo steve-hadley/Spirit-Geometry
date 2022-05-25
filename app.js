@@ -2,14 +2,7 @@
 // @Vectris
 // https://vectr.is/
 
-let variables = {
-  radius: 100,
-  axisCount: 8,
-  circleRadius: 100,
-  export:function(){ Export();}
-}
-
-let axisStep;
+let rotationStep;
 let points = [];
 
 // Animation
@@ -20,50 +13,71 @@ let frequency = 0;
 let circleMaxDiameter;
 let overshoot;
 
+let time = 0;
+
+let guiElements = {
+  innerRadius: 100,
+  axisCount: 8,
+  outerRadius: 100,
+  bloom: 10,
+  lineThickness: 2,
+  randomize:function(){ Randomize();},
+  capture:function(){ Export();}
+}
 let gui = new dat.GUI();
+let lineColour;
 
 function setup() {
   var canvas = createCanvas();
   canvas.parent('p5js-container');
-  colorMode(RGB, 255, 255, 255, 1);
 
-  gui.add(variables, 'radius', 0, 255);
-  gui.add(variables, 'axisCount', 3, 10, 1);
-  gui.add(variables, 'circleRadius', 0, 255);
-  gui.add(variables, 'export');
+  colorMode(HSL, 1);
 
   // Calculate canvas size in order to adapt to screen size
   calculateCanvasSize();
   
   noFill();
-  stroke(255);
-  strokeWeight(3);
 
   background(0);
-  colorMode(HSB, 1);
   // createLoop({duration:10, gif:true})
   angleMode(DEGREES);
   noFill();
-  stroke(1);
-  strokeWeight(3);
+  lineColour = color(1,1,1);
+  stroke(lineColour);
+  strokeWeight(guiElements.lineThickness);
 
   generatePoints();
+
+  gui.add(guiElements, 'randomize');
+  gui.add(guiElements, 'axisCount', 3, 10, 1).listen();
+  gui.add(guiElements, 'innerRadius', 0, 255).listen();
+  gui.add(guiElements, 'outerRadius', 0, 255).listen();
+  gui.add(guiElements, 'bloom', 0, 100).listen();
+  gui.add(guiElements, 'lineThickness', 1, 5).listen();
+  gui.add(guiElements, 'capture');
+}
+
+function convertColour(color){
+  return RGBToHSL(color[0], color[1], color[2]);
 }
 
 function draw(){
   background(0);
 
+  drawingContext.shadowBlur = guiElements.bloom;
+  drawingContext.shadowColor = lineColour;
+
+  lineColour = color(map(sin(time), -1, 1, 0, 1), 1, 0.5);
+  stroke(lineColour);
+  strokeWeight(guiElements.lineThickness);
+
   translate(width / 2, height / 2);
 
-  axisStep = 360 / variables.axisCount;
+  rotationStep = 360 / guiElements.axisCount;
 
   generatePoints();
 
   drawPoints();
-
-  // Main loop
-  drawingContext.shadowBlur = 100;
-  drawingContext.shadowColor = color(1, 1, 1);
 
   // Animate
   // if(animate){
@@ -84,18 +98,20 @@ function draw(){
   //     }
   //   }
   // }
+
+  time += deltaTime * 0.01;
 }
 
 function generatePoints(){
   points = [];
   // Generate points
   let theta = 0;
-  for (let i = 0; i < variables.axisCount; i++) {
-    let x = sin(theta) * variables.radius;
-    let y = cos(theta) * variables.radius;
+  for (let i = 0; i < guiElements.axisCount; i++) {
+    let x = sin(theta) * guiElements.innerRadius;
+    let y = cos(theta) * guiElements.innerRadius;
     points.push({x,y});
     point(x, y);
-    theta += axisStep;
+    theta += rotationStep;
   }
 }
 
@@ -103,7 +119,7 @@ function drawPoints(){
     // Draw ellipses at points
     for (let i = 0; i < points.length; i++) {
       let point = points[i];
-      ellipse(point.x, point.y, variables.circleRadius * 2)
+      ellipse(point.x, point.y, guiElements.outerRadius * 2)
     }
   
     // Draw lines between points
@@ -123,15 +139,25 @@ function Export() {
   saveCanvas('Export' + d.getDate() + d.getMonth() + d.getFullYear() + d.getHours() + d.getMinutes() + d.getSeconds(), 'jpg');
 }
 
+function Randomize(){
+  for (let i = 0; i < gui.__controllers.length; i++) {
+    const element = gui.__controllers[i];
+    if(element.hasOwnProperty('__max')){
+      guiElements[element.property] = parseInt(getRandomArbitrary(element.__min, element.__max));
+    }
+    time = parseInt(getRandomArbitrary(0, 10000));
+  }
+}
+
 function windowResized() {
   calculateCanvasSize();
 }
 
 function calculateCanvasSize(){
   if(windowWidth <= 1280){
-    resizeCanvas(windowWidth, windowHeight / 2);
+    resizeCanvas(windowWidth, windowWidth);
   } else {
-    resizeCanvas(windowWidth, windowHeight - 100);
+    resizeCanvas(windowHeight, windowHeight);
   }
 }
 
@@ -150,3 +176,28 @@ function gradientLine(x1, y1, x2, y2, color1, color2) {
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+function RGBToHSL(r, g, b) {
+  r /= 255, g /= 255, b /= 255;
+
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+
+    h /= 6;
+  }
+
+  return [ h, s, l ];
+}
+
