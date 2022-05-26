@@ -16,6 +16,8 @@ let overshoot;
 
 let time = 0;
 
+let canvasDiameter = 0;
+
 let guiElements = {
   innerRadius: 100,
   segments: 8,
@@ -38,7 +40,16 @@ function setup() {
   colorMode(HSL, 1);
 
   // Calculate canvas size in order to adapt to screen size
-  calculateCanvasSize();
+  setDefaults();
+
+  gui.add(guiElements, 'randomize');
+  gui.add(guiElements, 'segments', 3, 10, 1).listen();
+  gui.add(guiElements, 'innerRadius', 0, canvasDiameter / 4 - 10).listen();
+  gui.add(guiElements, 'outerRadius', 0, canvasDiameter / 4 - 10).listen();
+  gui.add(guiElements, 'bloom', 0, 100).listen();
+  gui.add(guiElements, 'lineThickness', 1, 5).listen();
+  gui.add(guiElements, 'capture');
+  gui.add(guiElements, 'Author');
   
   noFill();
 
@@ -51,15 +62,6 @@ function setup() {
   strokeWeight(guiElements.lineThickness);
 
   generatePoints();
-
-  gui.add(guiElements, 'randomize');
-  gui.add(guiElements, 'segments', 3, 10, 1).listen();
-  gui.add(guiElements, 'innerRadius', 0, 255).listen();
-  gui.add(guiElements, 'outerRadius', 0, 255).listen();
-  gui.add(guiElements, 'bloom', 0, 100).listen();
-  gui.add(guiElements, 'lineThickness', 1, 5).listen();
-  gui.add(guiElements, 'capture');
-  gui.add(guiElements, 'Author');
 }
 
 function draw(){
@@ -137,15 +139,13 @@ function Randomize(){
 }
 
 function windowResized() {
-  calculateCanvasSize();
+  setDefaults();
 }
 
-function calculateCanvasSize(){
-  if(windowWidth < windowHeight){
-    resizeCanvas(windowWidth, windowWidth);
-  } else {
-    resizeCanvas(windowHeight, windowHeight);
-  }
+function setDefaults(){
+  canvasDiameter = windowWidth < windowHeight ? windowWidth : windowHeight;
+  resizeCanvas(canvasDiameter, canvasDiameter);
+  guiElements.innerRadius = guiElements.outerRadius = canvasDiameter / 4;
 }
 
 function gradientLine(x1, y1, x2, y2, color1, color2) {
