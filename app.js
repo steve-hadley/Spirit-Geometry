@@ -18,6 +18,8 @@ let time = 0;
 
 let canvasDiameter = 0;
 
+let mobile = false;
+
 let guiElements = {
   innerRadius: 100,
   segments: 8,
@@ -54,6 +56,12 @@ function setup() {
   gui.add(guiElements, 'Author');
   
   guiElements.innerRadius = guiElements.outerRadius = defaultRadius;
+
+  if(mobile){
+    guiElements.lineThickness = 1;
+  } else {
+    guiElements.lineThickness = 2;
+  }
   
   noFill();
 
@@ -147,7 +155,13 @@ function windowResized() {
 }
 
 function setDefaults(){
-  canvasDiameter = windowWidth < windowHeight ? windowWidth : windowHeight;
+  if(windowWidth < windowHeight){
+    mobile = true;
+    canvasDiameter = windowWidth;
+  } else{
+    mobile = false;
+    canvasDiameter = windowHeight;
+  }
   resizeCanvas(canvasDiameter, canvasDiameter);
 }
 
