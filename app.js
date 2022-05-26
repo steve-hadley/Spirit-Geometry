@@ -24,8 +24,6 @@ let guiElements = {
   innerRadius: 100,
   segments: 8,
   outerRadius: 100,
-  bloom: 30,
-  lineThickness: 1,
   randomize:function(){ Randomize();},
   capture:function(){ Export();},
   Author:function(){ window.open("https://x.vectr.is/", '_blank').focus(); }
@@ -50,17 +48,15 @@ function setup() {
   gui.add(guiElements, 'segments', 3, 10, 1).listen();
   gui.add(guiElements, 'innerRadius', 30, defaultRadius).listen();
   gui.add(guiElements, 'outerRadius', 0, defaultRadius).listen();
-  gui.add(guiElements, 'bloom', 0, 100).listen();
-  gui.add(guiElements, 'lineThickness', 1, 5).listen();
   gui.add(guiElements, 'capture');
   gui.add(guiElements, 'Author');
   
   guiElements.innerRadius = guiElements.outerRadius = defaultRadius;
 
   if(mobile){
-    guiElements.lineThickness = 1;
+    strokeWeight(1);
   } else {
-    guiElements.lineThickness = 2;
+    strokeWeight(2);
   }
   
   noFill();
@@ -71,7 +67,6 @@ function setup() {
   noFill();
   colour = color(1,1,1);
   stroke(colour);
-  strokeWeight(guiElements.lineThickness);
 
   generatePoints();
 }
@@ -82,7 +77,7 @@ function draw(){
   translate(width / 2, height / 2);
 
   // Prep postFX
-  drawingContext.shadowBlur = guiElements.bloom;
+  drawingContext.shadowBlur = 30;
   drawingContext.shadowColor = colour;
 
   // Cycle colour
@@ -90,7 +85,6 @@ function draw(){
   stroke(colour);
 
   // Update variables based on GUI
-  strokeWeight(guiElements.lineThickness);
   rotationStep = 360 / guiElements.segments;
 
   generateGeo();
