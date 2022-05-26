@@ -42,14 +42,18 @@ function setup() {
   // Calculate canvas size in order to adapt to screen size
   setDefaults();
 
+  let defaultRadius = canvasDiameter / 4 - 10;
+
   gui.add(guiElements, 'randomize');
   gui.add(guiElements, 'segments', 3, 10, 1).listen();
-  gui.add(guiElements, 'innerRadius', 0, canvasDiameter / 4 - 10).listen();
-  gui.add(guiElements, 'outerRadius', 0, canvasDiameter / 4 - 10).listen();
+  gui.add(guiElements, 'innerRadius', 30, defaultRadius).listen();
+  gui.add(guiElements, 'outerRadius', 0, defaultRadius).listen();
   gui.add(guiElements, 'bloom', 0, 100).listen();
   gui.add(guiElements, 'lineThickness', 1, 5).listen();
   gui.add(guiElements, 'capture');
   gui.add(guiElements, 'Author');
+  
+  guiElements.innerRadius = guiElements.outerRadius = defaultRadius;
   
   noFill();
 
@@ -145,7 +149,6 @@ function windowResized() {
 function setDefaults(){
   canvasDiameter = windowWidth < windowHeight ? windowWidth : windowHeight;
   resizeCanvas(canvasDiameter, canvasDiameter);
-  guiElements.innerRadius = guiElements.outerRadius = canvasDiameter / 4;
 }
 
 function gradientLine(x1, y1, x2, y2, color1, color2) {
